@@ -4,8 +4,9 @@ let context;
 let rect;
 let width = 65;//getRandomNumber(50, 100);
 let height = 100;//getRandomNumber(50, 100);
-let arrRect;
+let player;
 let bImg = new Image();
+let map = [];
 bImg.src = 'assets/background.png';
 let pImg = new Image();
 pImg.src = 'assets/spaceship1.png';
@@ -16,26 +17,19 @@ let bulletImg = {
 
 bulletImg.img.src = 'assets/beams.png';
 let bgY = 0;
-let myMouse = {
-  x: -1,
-  y: -1
+let weapon = new Weapon();
+let movement = new Movement();
+
+
+let bodyElem = document.getElementById("body");
+bodyElem.onkeydown = bodyElem.onkeyup = (event) => {
+  movement.Handle(event);
+  weapon.Handle(event);
 };
 
-let myArrows = {
-  up: false,
-  down: false,
-  right: false,
-  left: false,
-  fire: false,
-  firePress: false,
-  shots: 0,
-};
-let bodyElem = document.getElementById("body");
 function ToRadians(degrees) {
   return degrees * Math.PI / 180;
 }
-
-
 
 function loadBody() {
   can = document.getElementById("canvas");
@@ -43,7 +37,7 @@ function loadBody() {
   can.height = document.body.clientHeight;
   context = can.getContext("2d");
 
-  arrRect = new Player(
+  player = new Player(
     getRandomNumber(0, can.width - width),
     getRandomNumber(0, can.height - height),
     10,
@@ -54,51 +48,6 @@ function loadBody() {
     can,
     context
   );
-  can.addEventListener("click", function (event) {
-    let rect = can.getBoundingClientRect();
-    myMouse.x = event.clientX - rect.left;
-    myMouse.y = event.clientY - rect.top;
-  }
-  );
-}
-let map = [];
-bodyElem.onkeydown = bodyElem.onkeyup = handle;
-
-function handle(event) {
-  if (event.key === "f" && event.type == "keydown" && !myArrows.firePress) {
-    myArrows.firePress = true;
-    myArrows.fire = true;
-  } else if (event.key === "f" && event.type == "keyup") {
-    myArrows.fire = false
-    myArrows.firePress = false;
-  }
-
-  if (event.key === "ArrowUp" && event.type == "keydown") {
-    myArrows.up = true;
-  } else if (event.key === "ArrowUp" && event.type == "keyup") {
-    myArrows.up = false
-  }
-
-
-  if (event.key === "ArrowDown" && event.type == "keydown") {
-    myArrows.down = true;
-  } else if (event.key === "ArrowDown" && event.type == "keyup") {
-    myArrows.down = false
-  }
-
-  if (event.key === "ArrowLeft" && event.type == "keydown") {
-    myArrows.left = true;
-  } else if (event.key === "ArrowLeft" && event.type == "keyup") {
-    myArrows.left = false
-  }
-
-
-  if (event.key === "ArrowRight" && event.type == "keydown") {
-    myArrows.right = true;
-  } else if (event.key === "ArrowRight" && event.type == "keyup") {
-    myArrows.right = false
-  }
-
 }
 
 function CreateRectangles() {
@@ -110,32 +59,24 @@ function CreateRectangles() {
   context.drawImage(bImg, 0, bgY - bImg.height);
   context.drawImage(bImg, bImg.width, bgY - bImg.height);
 
-  if (myArrows.up) {
-    arrRect.MoveUp();
+  if (movement.up) {
+    player.MoveUp();
   }
 
-  if (myArrows.down) {
-    arrRect.MoveDown();
+  if (movement.down) {
+    player.MoveDown();
   }
 
-  if (myArrows.left) {
-    arrRect.MoveLeft();
+  if (movement.left) {
+    player.MoveLeft();
   }
 
-  if (myArrows.right) {
-    arrRect.MoveRight();
+  if (movement.right) {
+    player.MoveRight();
   }
-  if (myArrows.fire) {
-    if (myArrows.shots < bulletLimit) {
-      myArrows.shots++;
-      let bullet = new Bullet((arrRect.x + (arrRect.width / 2)), arrRect.y + 20, 5, 10, 10, context);
-      let bulletInterval = setInterval(function () {
-        if (!bullet.Shoot(myArrows)) clearInterval(bulletInterval);
-      }, 100);
-      myArrows.fire = false;
-    }
-  }
-  arrRect.Draw();
+  
+  weapon.Shoot(player,context);
+  player.Draw();
 
 }
 
