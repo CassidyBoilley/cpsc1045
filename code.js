@@ -1,4 +1,3 @@
-//import { Player } from './src/player.js'
 let bulletLimit = 5;
 let can;
 let context;
@@ -28,6 +27,7 @@ let myArrows = {
   right: false,
   left: false,
   fire: false,
+  firePress: false,
   shots: 0,
 };
 let bodyElem = document.getElementById("body");
@@ -35,99 +35,7 @@ function ToRadians(degrees) {
   return degrees * Math.PI / 180;
 }
 
-class Player {
-  constructor(x, y, dX, dY, width, height, color, canvas, context) {
-    this.x = x;
-    this.y = y;
-    this.dX = dX;
-    this.dY = dY;
-    this.width = width;
-    this.height = height;
-    this.color = color;
-    this.canvas = canvas;
-    this.context = context;
-    this.wall = {
-      left: 0,
-      top: 0,
-      right: this.canvas.width,
-      bottom: this.canvas.height
-    }
-  }
 
-  Draw() {
-    this.context.drawImage(pImg, this.x, this.y, this.width, this.height);
-    // this.context.beginPath();
-    // this.context.fillStyle = this.color;
-    // this.context.fillRect(this.x, this.y, this.width, this.height);
-    // this.context.stroke();
-    // this.context.drawImage(pImg, this.x, this.y, this.width, this.height);
-  }
-
-  MoveUp() {
-    let newY = this.y - this.dY;
-
-    if (!(newY <= 0)) {
-      this.y = newY;
-    }
-  }
-
-  MoveDown() {
-    let newY = this.y + this.dY;
-
-    if (!(newY + this.height >= this.canvas.height)) {
-      this.y = newY;
-    }
-  }
-
-  MoveLeft() {
-    let newX = this.x - this.dX;
-
-    if (!(newX <= 0)) {
-      this.x = newX;
-    }
-  }
-
-  MoveRight() {
-    let newX = this.x + this.dX;
-
-    if (!(newX + this.width >= this.canvas.width)) {
-      this.x = newX;
-    }
-  }
-}
-
-class Circle {
-  constructor(x, y, radius, dX, dY, color) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.dX = dX;
-    this.dY = dY;
-    this.color = color;
-    this.pulse = 1;
-  }
-
-  MoveUp() {
-    let newY = this.y - this.dY;
-
-    if ((newY - (this.radius - 1) >= 0)) {
-      this.y = newY;
-      return true
-    } else {
-      return false;
-    }
-  }
-
-  Draw() {
-    context.drawImage(bulletImg.img, bulletImg.red.x, bulletImg.red.y, bulletImg.red.width, bulletImg.red.height, this.x - (bulletImg.red.width / 2),
-      this.y - (bulletImg.red.height), bulletImg.red.width, bulletImg.red.height);
-    // context.beginPath();
-    // context.arc(this.x, this.y, this.radius, ToRadians(0), ToRadians(360));
-    // context.closePath();
-    // context.fillStyle = this.color;
-    // context.fill();
-  }
-}
 
 function loadBody() {
   can = document.getElementById("canvas");
@@ -157,10 +65,12 @@ let map = [];
 bodyElem.onkeydown = bodyElem.onkeyup = handle;
 
 function handle(event) {
-  if (event.key === "f" && event.type == "keydown") {
+  if (event.key === "f" && event.type == "keydown" && !myArrows.firePress) {
+    myArrows.firePress = true;
     myArrows.fire = true;
   } else if (event.key === "f" && event.type == "keyup") {
     myArrows.fire = false
+    myArrows.firePress = false;
   }
 
   if (event.key === "ArrowUp" && event.type == "keydown") {
@@ -218,15 +128,11 @@ function CreateRectangles() {
   if (myArrows.fire) {
     if (myArrows.shots < bulletLimit) {
       myArrows.shots++;
-      let bullet = new Circle((arrRect.x + (arrRect.width / 2)), arrRect.y + 20, 5, 10, 10, "red");
+      let bullet = new Bullet((arrRect.x + (arrRect.width / 2)), arrRect.y + 20, 5, 10, 10, context);
       let bulletInterval = setInterval(function () {
-        if (!bullet.MoveUp()) {
-          myArrows.shots--;
-          clearInterval(bulletInterval);
-        } else {
-          bullet.Draw();
-        }
+        if (!bullet.Shoot(myArrows)) clearInterval(bulletInterval);
       }, 100);
+      myArrows.fire = false;
     }
   }
   arrRect.Draw();

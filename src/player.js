@@ -1,4 +1,4 @@
-export default class Player {
+class Player {
     constructor(x, y, dX, dY, width, height, color, canvas, context) {
         this.x = x;
         this.y = y;
@@ -18,10 +18,12 @@ export default class Player {
     }
 
     Draw() {
-        this.context.beginPath();
-        this.context.fillStyle = this.color;
-        this.context.fillRect(this.x, this.y, this.width, this.height);
-        this.context.stroke();
+        this.context.drawImage(pImg, this.x, this.y, this.width, this.height);
+        // this.context.beginPath();
+        // this.context.fillStyle = this.color;
+        // this.context.fillRect(this.x, this.y, this.width, this.height);
+        // this.context.stroke();
+        // this.context.drawImage(pImg, this.x, this.y, this.width, this.height);
     }
 
     MoveUp() {
