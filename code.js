@@ -1,3 +1,4 @@
+let time = 5000;
 let bulletLimit = 5;
 let can;
 let context;
@@ -8,17 +9,16 @@ let player;
 let bImg = new Image();
 let map = [];
 bImg.src = 'assets/background.png';
-let pImg = new Image();
-pImg.src = 'assets/spaceship1.png';
 let bulletImg = {
   img: new Image(),
-  red: { width: 70, height: 110, x: 200, y: 290 },
+  red: { width: 70, height: 110, x: 200, y: 310 },
 }
 
 bulletImg.img.src = 'assets/beams.png';
 let bgY = 0;
 let weapon = new Weapon();
 let movement = new Movement();
+let enemy;
 
 
 let bodyElem = document.getElementById("body");
@@ -38,19 +38,20 @@ function loadBody() {
   context = can.getContext("2d");
 
   player = new Player(
+    can,
+    context,
     getRandomNumber(0, can.width - width),
     getRandomNumber(0, can.height - height),
-    10,
-    10,
-    width,
-    height,
-    getRandomColor(),
-    can,
-    context
   );
+
+  enemy = [new Enemy(
+    can,
+    context,
+    getRandomNumber(0, can.width - width)
+  )];
 }
 
-function CreateRectangles() {
+function RunGame() {
   context.clearRect(0, 0, can.width, can.height);
   context.drawImage(bImg, 0, bgY);
   context.drawImage(bImg, bImg.width, bgY);
@@ -74,12 +75,31 @@ function CreateRectangles() {
   if (movement.right) {
     player.MoveRight();
   }
-  
-  weapon.Shoot(player,context);
-  player.Draw();
 
+  weapon.Shoot(player, context);
+  player.Draw();
+  weapon.b.forEach((w, iB) => {
+    enemy.forEach((e, i) => {
+      if (w.GetHitBox().x >= e.GetHitBox().x && w.GetHitBox().x <= e.GetHitBox().width && w.GetHitBox().y <= e.GetHitBox().height) {
+        weapon.b.splice(iB, 1)
+        enemy.splice(i, 1)
+        NewEnemy();
+      }
+    });
+  });
+  enemy.forEach(element => {
+    element.Movement();
+    element.Draw();
+  });
 }
 
+function NewEnemy() {
+  enemy.push(new Enemy(
+    can,
+    context,
+    getRandomNumber(0, can.width - width)
+  ))
+}
 
 
 function getRandomNumber(min, max) {
@@ -95,4 +115,6 @@ function getRandomColor() {
   return color;
 }
 
-setInterval(CreateRectangles, 100);
+setInterval(RunGame, 100);
+
+setInterval(NewEnemy, time);

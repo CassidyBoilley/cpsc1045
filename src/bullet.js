@@ -9,6 +9,10 @@ class Bullet {
         this.context = context;
     }
 
+    ToRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
     MoveUp() {
         let newY = this.y - this.dY;
 
@@ -21,16 +25,30 @@ class Bullet {
     }
 
     Draw() {
+        // this.context.beginPath();
+        // this.context.arc(this.x, this.y - (bulletImg.red.height) + 10, this.radius, this.ToRadians(0), this.ToRadians(360));
+        // this.context.closePath();
+        // this.context.fillStyle = 'white';
+        // this.context.fill();
+
         this.context.drawImage(
-            bulletImg.img, 
-            bulletImg.red.x, 
-            bulletImg.red.y, 
-            bulletImg.red.width, 
-            bulletImg.red.height, 
+            bulletImg.img,
+            bulletImg.red.x,
+            bulletImg.red.y,
+            bulletImg.red.width,
+            bulletImg.red.height,
             this.x - (bulletImg.red.width / 2),
-            this.y - (bulletImg.red.height), 
-            bulletImg.red.width, 
+            this.y - (bulletImg.red.height),
+            bulletImg.red.width,
             bulletImg.red.height
         );
+    }
+
+    GetHitBox() {
+        return {
+            x: this.x,
+            y: this.y - (bulletImg.red.height) + 10,
+            height: this.y
+        }
     }
 }

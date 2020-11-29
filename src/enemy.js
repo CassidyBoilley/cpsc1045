@@ -1,11 +1,14 @@
-class Player {
-    constructor(canvas, context, x = 10, y = 10, dX = 10, dY = 10, width = 65, height = 100) {
-        this.x = x;
-        this.y = y;
+class Enemy {
+    constructor(canvas, context, x = 10, y = 10, dX = 10, dY = 10, width = 120, height = 65) {
+        width,
+            height,
+            getRandomColor(),
+            this.x = x;
+        this.y = 10;
         this.dX = dX;
         this.dY = dY;
         this.image = new Image();
-        this.image.src = 'assets/spaceship1.png';
+        this.image.src = 'assets/enemy1.png';
         this.width = width;
         this.height = height;
         this.canvas = canvas;
@@ -20,11 +23,29 @@ class Player {
 
     Draw() {
         this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+
         // this.context.beginPath();
-        // this.context.fillStyle = this.color;
+        // this.context.fillStyle = 'white';
         // this.context.fillRect(this.x, this.y, this.width, this.height);
         // this.context.stroke();
-        // this.context.drawImage(pImg, this.x, this.y, this.width, this.height);
+
+    }
+
+    Movement() {
+        let newX = this.x - this.dX;
+        let newY = this.y - this.dY;
+
+        if (newY < 0 || newY > 50) {
+            this.dY = -this.dY;
+        }
+
+
+        if (getRandomNumber(0, 100) <= 5) this.dX = -this.dX;
+        if ((newX + this.width >= this.canvas.width) || (newX <= 0)) {
+            this.dX = -this.dX;
+        }
+        this.x = newX;
+        this.y = newY;
     }
 
     MoveUp() {
@@ -56,6 +77,15 @@ class Player {
 
         if (!(newX + this.width >= this.canvas.width)) {
             this.x = newX;
+        }
+    }
+
+    GetHitBox() {
+        return {
+            x: this.x,
+            y: this.y,
+            height: this.height + this.y,
+            width: this.width + this.x
         }
     }
 }
