@@ -4,22 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
   <style>
     html,
     body {
       overflow: hidden;
       height: 100%;
+      margin: 0;
     }
   </style>
   <title>Document</title>
 </head>
 
 <body onload="loadBody()" id="body">
-  <!-- <img id="background" style="display: none;" width="300" height="400" src="background.png"> -->
+  <div id="startBtn" style="position: absolute; ">
+    <div style="position: relative;"></div>
+    <button onclick="StartGame()">
+      <span>Start Game</span>
+    </button>
+  </div>
+  </div>
   <canvas id="canvas" width="1000" height="500" style="border: 1px solid">
   </canvas>
   <script src="src/player.js"></script>
   <script src="src/bullet.js"></script>
+  <script src="src/enemyBullets.js"></script>
   <script src="src/movement.js"></script>
   <script src="src/weapon.js"></script>
   <script src="src/enemy.js"></script>

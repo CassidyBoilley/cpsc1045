@@ -13,22 +13,45 @@ class Enemy {
         this.height = height;
         this.canvas = canvas;
         this.context = context;
+        this.img = {
+            img: new Image(),
+            red: { width: 70, height: 110, x: 200, y: 310 },
+        }
+        this.img.img.src = 'assets/beams.png';
+
         this.wall = {
             left: 0,
             top: 0,
             right: this.canvas.width,
             bottom: this.canvas.height
         }
+        this.bulletsLimit = 1;
+        this.fire = true;
+        this.b = [];
     }
 
     Draw() {
         this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
 
+        this.b.forEach((element, i) => {
+            if (!element.MoveDown()) {
+                this.b.splice(i, 1);
+            } else {
+                element.Draw();
+            }
+        });
         // this.context.beginPath();
         // this.context.fillStyle = 'white';
         // this.context.fillRect(this.x, this.y, this.width, this.height);
         // this.context.stroke();
+    }
 
+    Shoot() {
+        if (this.b.length < this.bulletsLimit) {
+            this.fire = false;
+            this.b.push(new EnemyBullet((this.x + (this.width / 2)), (this.height + this.y + 60), 5, 10, 30,
+                this.context, this.canvas));
+        }
     }
 
     Movement() {
@@ -41,7 +64,7 @@ class Enemy {
 
 
         if (getRandomNumber(0, 100) <= 5) this.dX = -this.dX;
-        if ((newX + this.width >= this.canvas.width) || (newX <= 0)) {
+        if ((newX + this.width >= this.canvas.width + 50) || (newX <= 0)) {
             this.dX = -this.dX;
         }
         this.x = newX;

@@ -1,3 +1,4 @@
+let runGame;
 let time = 5000;
 let bulletLimit = 5;
 let can;
@@ -15,6 +16,13 @@ let bulletImg = {
 }
 
 bulletImg.img.src = 'assets/beams.png';
+
+let enemyBulletImg = {
+  img: new Image(),
+  red: { width: 20, height: 110, x: 5, y: 10 },
+}
+
+enemyBulletImg.img.src = 'assets/beams.png';
 let bgY = 0;
 let weapon = new Weapon();
 let movement = new Movement();
@@ -23,6 +31,7 @@ let enemy;
 
 let bodyElem = document.getElementById("body");
 bodyElem.onkeydown = bodyElem.onkeyup = (event) => {
+  if (event.key === 'Escape') StopGame();
   movement.Handle(event);
   weapon.Handle(event);
 };
@@ -36,6 +45,9 @@ function loadBody() {
   can.width = document.body.clientWidth;
   can.height = document.body.clientHeight;
   context = can.getContext("2d");
+  context.clearRect(0, 0, can.width, can.height);
+  context.drawImage(bImg, 0, bgY);
+  context.drawImage(bImg, bImg.width, bgY);
 
   player = new Player(
     can,
@@ -88,6 +100,7 @@ function RunGame() {
     });
   });
   enemy.forEach(element => {
+    element.Shoot();
     element.Movement();
     element.Draw();
   });
@@ -115,6 +128,15 @@ function getRandomColor() {
   return color;
 }
 
-setInterval(RunGame, 100);
+function StartGame() {
+  document.getElementById('startBtn').style.display = 'none';
+  runGame = setInterval(RunGame, 100);
+}
 
-setInterval(NewEnemy, time);
+function StopGame() {
+  clearInterval(runGame);
+  document.getElementById('startBtn').style.display = 'block';
+}
+
+
+//setInterval(NewEnemy, time);

@@ -2,7 +2,7 @@ class Weapon {
     constructor() {
         this.fire = 'off';
         this.bullets = 0;
-        this.bulletsLimit = 2;
+        this.bulletsLimit = 5;
         this.typeShot = 'single';
         this.keyPressed = false;
         this.burst = 3;
@@ -56,15 +56,7 @@ class Weapon {
     SingleShot(player, context) {
         if (this.b.length < this.bulletsLimit) {
             this.fire = false;
-            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context));
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context, false, player.img));
         }
-    }
-
-    sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-            currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
     }
 }
