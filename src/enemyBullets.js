@@ -48,7 +48,7 @@ class EnemyBullet {
     GetHitBox() {
         return {
             x: this.x,
-            y: this.y - (enemyBulletImg.red.height) + 10,
+            y: this.y - (enemyBulletImg.red.height),
             height: this.y
         }
     }

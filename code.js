@@ -48,19 +48,6 @@ function loadBody() {
   context.clearRect(0, 0, can.width, can.height);
   context.drawImage(bImg, 0, bgY);
   context.drawImage(bImg, bImg.width, bgY);
-
-  player = new Player(
-    can,
-    context,
-    getRandomNumber(0, can.width - width),
-    getRandomNumber(0, can.height - height),
-  );
-
-  enemy = [new Enemy(
-    can,
-    context,
-    getRandomNumber(0, can.width - width)
-  )];
 }
 
 function RunGame() {
@@ -93,25 +80,42 @@ function RunGame() {
   weapon.b.forEach((w, iB) => {
     enemy.forEach((e, i) => {
       if (w.GetHitBox().x >= e.GetHitBox().x && w.GetHitBox().x <= e.GetHitBox().width && w.GetHitBox().y <= e.GetHitBox().height) {
-        weapon.b.splice(iB, 1)
-        enemy.splice(i, 1)
-        NewEnemy();
+        weapon.b.splice(iB, 1);
+        if (e.status) {
+          player.exp++;
+          NewEnemy();
+          e.status = 0;
+        }
       }
     });
   });
-  enemy.forEach(element => {
-    element.Shoot();
-    element.Movement();
-    element.Draw();
+
+  enemy.forEach((e, i) => {
+    e.Shoot();
+    if (e.b.length > 0) {
+      e.b.forEach(b => {
+        if (b.GetHitBox().x >= player.GetHitBox().x && b.GetHitBox().x <= player.GetHitBox().width && b.GetHitBox().height >= player.GetHitBox().y && b.GetHitBox().y <= player.GetHitBox().height) {
+          player = "";
+          StopGame();
+        }
+      });
+    }
+    e.Movement();
+    e.Draw()
+    if (!e.live) {
+      enemy.splice(i, 1);
+    }
   });
 }
 
 function NewEnemy() {
-  enemy.push(new Enemy(
-    can,
-    context,
-    getRandomNumber(0, can.width - width)
-  ))
+  if (enemy.length <= 5) {
+    enemy.push(new Enemy(
+      can,
+      context,
+      getRandomNumber(0, can.width - width)
+    ))
+  }
 }
 
 
@@ -130,6 +134,18 @@ function getRandomColor() {
 
 function StartGame() {
   document.getElementById('startBtn').style.display = 'none';
+  player = new Player(
+    can,
+    context,
+    getRandomNumber(0, can.width - width),
+    getRandomNumber(0, can.height - height),
+  );
+
+  enemy = [new Enemy(
+    can,
+    context,
+    getRandomNumber(0, can.width - width)
+  )];
   runGame = setInterval(RunGame, 100);
 }
 
@@ -139,4 +155,4 @@ function StopGame() {
 }
 
 
-//setInterval(NewEnemy, time);
+setInterval(NewEnemy, time);

@@ -7,6 +7,12 @@ class Weapon {
         this.keyPressed = false;
         this.burst = 3;
         this.b = [];
+        this.player;
+        this.spreadBulletImg = {
+            img: new Image(),
+            red: { width: 20, height: 110, x: 5, y: 10 },
+        }
+        this.spreadBulletImg.img.src = 'assets/beams.png';
     }
 
     Handle(event) {
@@ -19,13 +25,16 @@ class Weapon {
     }
 
     Shoot(player, context) {
-
+        this.player = player;
         if (this.fire == true) {
-            if (this.typeShot == 'single') {
+            if (this.player.exp <= 5) {
                 this.SingleShot(player, context)
-            }
-            if (this.typeShot == 'burst') {
+            } else if (this.player.exp <= 10) {
+                this.bulletsLimit = 15;
                 this.BurstShot(player, context)
+            } else if (this.player.exp <= 20) {
+                this.bulletsLimit = 15;
+                this.SpreadShot(player, context)
             }
         }
         this.b.forEach((element, i) => {
@@ -38,25 +47,28 @@ class Weapon {
         });
     }
 
+    SpreadShot(player, context) {
+        if (this.b.length < this.bulletsLimit) {
+            this.fire = false;
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context, false, player.img));
+            this.b.push(new Bullet(player.x, player.y + 50, 5, 10, 30, context, false, player.img));
+            this.b.push(new Bullet((player.x + player.width), player.y + 50, 5, 10, 30, context, false, player.img));
+        }
+    }
+
     BurstShot(player, context) {
-        // for(let i = 0; i < this.burst; i++){
-        //     let b = new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 10, context);
-        //     let bulletInterval = setInterval(function () {
-        //         if (!b.MoveUp()){
-        //             clearInterval(bulletInterval);
-        //         }else{
-        //           b.Draw();
-        //         }
-        //     }, 100);
-        //     this.fire = false;
-        // }
-        console.log('aqui')
+        if (this.b.length < this.bulletsLimit) {
+            this.fire = false;
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context, false, player.img));
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 80, 5, 10, 30, context, false, player.img));
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 140, 5, 10, 30, context, false, player.img));
+        }
     }
 
     SingleShot(player, context) {
         if (this.b.length < this.bulletsLimit) {
             this.fire = false;
-            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context, false, player.img));
+            this.b.push(new Bullet((player.x + (player.width / 2)), player.y + 20, 5, 10, 30, context, false, this.spreadBulletImg));
         }
     }
 }

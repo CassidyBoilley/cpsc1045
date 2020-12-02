@@ -1,5 +1,5 @@
 class Bullet {
-    constructor(x, y, radius, dX, dY, context) {
+    constructor(x, y, radius, dX, dY, context, img = false) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -7,6 +7,7 @@ class Bullet {
         this.dY = dY;
         this.pulse = 1;
         this.context = context;
+        this.img = img ? img : bulletImg;
     }
 
     ToRadians(degrees) {
@@ -32,15 +33,15 @@ class Bullet {
         // this.context.fill();
 
         this.context.drawImage(
-            bulletImg.img,
-            bulletImg.red.x,
-            bulletImg.red.y,
-            bulletImg.red.width,
-            bulletImg.red.height,
-            this.x - (bulletImg.red.width / 2),
-            this.y - (bulletImg.red.height),
-            bulletImg.red.width,
-            bulletImg.red.height
+            this.img.img,
+            this.img.red.x,
+            this.img.red.y,
+            this.img.red.width,
+            this.img.red.height,
+            this.x - (this.img.red.width / 2),
+            this.y - (this.img.red.height),
+            this.img.red.width,
+            this.img.red.height
         );
     }
 

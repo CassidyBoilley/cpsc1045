@@ -1,9 +1,6 @@
 class Enemy {
     constructor(canvas, context, x = 10, y = 10, dX = 10, dY = 10, width = 120, height = 65) {
-        width,
-            height,
-            getRandomColor(),
-            this.x = x;
+        this.x = x;
         this.y = 10;
         this.dX = dX;
         this.dY = dY;
@@ -28,18 +25,21 @@ class Enemy {
         this.bulletsLimit = 1;
         this.fire = true;
         this.b = [];
+        this.status = 1;
+        this.live = 1;
     }
 
     Draw() {
-        this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-
+        if (this.status) this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
         this.b.forEach((element, i) => {
             if (!element.MoveDown()) {
                 this.b.splice(i, 1);
+                if (!this.status) this.live = 0;
             } else {
                 element.Draw();
             }
         });
+        return true;
         // this.context.beginPath();
         // this.context.fillStyle = 'white';
         // this.context.fillRect(this.x, this.y, this.width, this.height);

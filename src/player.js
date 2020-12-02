@@ -16,6 +16,7 @@ class Player {
             right: this.canvas.width,
             bottom: this.canvas.height
         }
+        this.exp = 0;
     }
 
     Draw() {
@@ -56,6 +57,15 @@ class Player {
 
         if (!(newX + this.width >= this.canvas.width)) {
             this.x = newX;
+        }
+    }
+
+    GetHitBox() {
+        return {
+            x: this.x,
+            y: this.y,
+            height: this.height + this.y,
+            width: this.width + this.x
         }
     }
 }
