@@ -27,28 +27,28 @@ class EnemyBullet {
 
     Draw() {
         // this.context.beginPath();
-        // this.context.arc(this.x, this.y - (enemyBulletImg.red.height) + 10, this.radius, this.ToRadians(0), this.ToRadians(360));
+        // this.context.arc(this.x, this.y - (enemyBulletImg.position.height) + 10, this.radius, this.ToRadians(0), this.ToRadians(360));
         // this.context.closePath();
         // this.context.fillStyle = 'white';
         // this.context.fill();
 
         this.context.drawImage(
             enemyBulletImg.img,
-            enemyBulletImg.red.x,
-            enemyBulletImg.red.y,
-            enemyBulletImg.red.width,
-            enemyBulletImg.red.height,
-            this.x - (enemyBulletImg.red.width / 2),
-            this.y - (enemyBulletImg.red.height),
-            enemyBulletImg.red.width,
-            enemyBulletImg.red.height
+            enemyBulletImg.position.x,
+            enemyBulletImg.position.y,
+            enemyBulletImg.position.width,
+            enemyBulletImg.position.height,
+            this.x - (enemyBulletImg.position.width / 2),
+            this.y - (enemyBulletImg.position.height),
+            enemyBulletImg.position.width,
+            enemyBulletImg.position.height
         );
     }
 
     GetHitBox() {
         return {
             x: this.x,
-            y: this.y - (enemyBulletImg.red.height),
+            y: this.y - (enemyBulletImg.position.height),
             height: this.y
         }
     }

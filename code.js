@@ -9,20 +9,24 @@ let height = 100;//getRandomNumber(50, 100);
 let player;
 let bImg = new Image();
 let map = [];
+let star = new Star();
+let y = 100;
 bImg.src = 'assets/background.png';
 let bulletImg = {
   img: new Image(),
-  red: { width: 70, height: 110, x: 200, y: 310 },
+  position: { width: 70, height: 110, x: 200, y: 310 },
 }
 
 bulletImg.img.src = 'assets/beams.png';
 
 let enemyBulletImg = {
   img: new Image(),
-  red: { width: 20, height: 110, x: 5, y: 10 },
+  position: { width: 20, height: 110, x: 5, y: 10 },
 }
 
 enemyBulletImg.img.src = 'assets/beams.png';
+
+
 let bgY = 0;
 let weapon = new Weapon();
 let movement = new Movement();
@@ -58,6 +62,7 @@ function RunGame() {
   if (bgY >= can.height) bgY = 0;
   context.drawImage(bImg, 0, bgY - bImg.height);
   context.drawImage(bImg, bImg.width, bgY - bImg.height);
+  star.Draw();
 
   if (movement.up) {
     player.MoveUp();
@@ -153,6 +158,5 @@ function StopGame() {
   clearInterval(runGame);
   document.getElementById('startBtn').style.display = 'block';
 }
-
 
 setInterval(NewEnemy, time);

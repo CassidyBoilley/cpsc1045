@@ -8,6 +8,7 @@ class Bullet {
         this.pulse = 1;
         this.context = context;
         this.img = img ? img : bulletImg;
+
     }
 
     ToRadians(degrees) {
@@ -27,28 +28,28 @@ class Bullet {
 
     Draw() {
         // this.context.beginPath();
-        // this.context.arc(this.x, this.y - (bulletImg.red.height) + 10, this.radius, this.ToRadians(0), this.ToRadians(360));
+        // this.context.arc(this.x, this.y - (bulletImg.position.height) + 10, this.radius, this.ToRadians(0), this.ToRadians(360));
         // this.context.closePath();
         // this.context.fillStyle = 'white';
         // this.context.fill();
 
         this.context.drawImage(
             this.img.img,
-            this.img.red.x,
-            this.img.red.y,
-            this.img.red.width,
-            this.img.red.height,
-            this.x - (this.img.red.width / 2),
-            this.y - (this.img.red.height),
-            this.img.red.width,
-            this.img.red.height
+            this.img.position.x,
+            this.img.position.y,
+            this.img.position.width,
+            this.img.position.height,
+            this.x - (this.img.position.width / 2),
+            this.y - (this.img.position.height),
+            this.img.position.width,
+            this.img.position.height
         );
     }
 
     GetHitBox() {
         return {
             x: this.x,
-            y: this.y - (bulletImg.red.height) + 10,
+            y: this.y - (bulletImg.position.height) + 10,
             height: this.y
         }
     }
