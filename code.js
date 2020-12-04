@@ -53,6 +53,16 @@ function loadBody() {
   context.drawImage(bImg, 0, bgY);
   context.drawImage(bImg, bImg.width, bgY);
 }
+function rotateShipLeft() {
+  let angle = 0;
+  angle += 45;
+  ("spaceship1.png").rotate(angle);
+}
+function rotateShipRight(){
+  let angle = 0;
+  angle += 135;
+  ("spaceship1.png").rotate(angle);
+}
 
 function RunGame() {
   context.clearRect(0, 0, can.width, can.height);
@@ -74,10 +84,12 @@ function RunGame() {
 
   if (movement.left) {
     player.MoveLeft();
+    player.rotateShipLeft;
   }
 
   if (movement.right) {
     player.MoveRight();
+    player.rotateShipRight;
   }
 
   weapon.Shoot(player, context);
